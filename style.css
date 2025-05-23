@@ -5,11 +5,38 @@
 }
 
 body {
-  background-color: #c3b8de;
+  background-color: #efeded;
   font-family: "Montserrat", sans-serif;
 }
 
+.header {
+  height: 150px;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #4d99e7;
+  background-image: url(content/images/blue-sky.jpg);
+  background-size: contain;
+  background-position: right;
+  background-repeat: no-repeat;
+  box-shadow: 0 5px 10px #00000035;
+}
+
+.head-title-box {
+  height: 50px;
+  width: auto;
+}
+
+.head-right-box {
+  height: 60px;
+  width: 60px;
+  background-color: #efeded;
+  border-radius: 50%;
+}
 h1 {
+  font-size: 20px;
   font-family: "Roboto Condensed", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
+  color: #003b46;
 }
