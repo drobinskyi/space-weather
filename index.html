@@ -17,9 +17,19 @@
       <div class="head-title-box">
         <h1 class="head-title">КОСМІЧНА<br />ПОГОДА</h1>
       </div>
-      <div class="head-right-box"></div>
+      <div class="head-right-box">
+        <span class="k-index-now"></span>
+      </div>
     </header>
-    <main></main>
+    <main>
+      <div class="page-404"></div>
+      <div class="page-meteoagent">
+        <iframe
+          class="meteoagent-widget"
+          src="https://api.meteoagent.com/widgets/v1/kindex"
+        ></iframe>
+      </div>
+    </main>
     <script src="script.js"></script>
   </body>
 </html>
