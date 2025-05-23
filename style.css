@@ -69,6 +69,6 @@ body {
 .meteoagent-widget {
   width: 100%;
   height: 600px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
 }
