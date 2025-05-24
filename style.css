@@ -52,13 +52,45 @@ body {
   color: #003b46;
 }
 
+/* Головний блок */
+main {
+  width: 100%;
+  height: calc(100vh - 120px);
+}
+
 /* Вікно помилки */
 .page-404 {
   width: 100%;
-  height: auto;
+  height: 100%;
   padding: 20px;
   display: flex;
   justify-content: space-between;
+}
+
+.left-side-404 {
+  height: 100%;
+  width: auto;
+  display: flex;
+  align-items: center;
+}
+
+.message-404 {
+  font-size: 40px;
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 500;
+  color: #5c0000;
+}
+
+.right-side-404 {
+  height: 100%;
+  width: auto;
+  display: flex;
+  justify-content: end;
+}
+
+.blue-satellite {
+  height: 120px;
+  width: 120px;
 }
 
 /* Meteoagent */
