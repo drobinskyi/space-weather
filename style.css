@@ -7,6 +7,8 @@
 body {
   background-color: #efeded;
   font-family: "Montserrat", sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Шапка сайту */
@@ -55,6 +57,7 @@ body {
 /* Головний блок */
 main {
   width: 100%;
+  flex-grow: 1;
   height: calc(100vh - 120px);
 }
 
