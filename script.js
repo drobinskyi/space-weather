@@ -16,27 +16,27 @@ async function loadData(data) {
 }
 
 // Основні DOM-елементи
-const pageForecast = document.querySelector('.page-forecast');
+const scheduleBody = document.querySelector('.page-forecast');
 const pageError = document.querySelector('.page-404');
 
 // Відображення сторінки помилки
 function errorMessage() {
-    pageForecast.setAttribute("style", "display: none");
+    scheduleBody.setAttribute("style", "display: none");
     pageError.setAttribute("style", "display: flex");
 }
 
 // Функція для отримання текстового статусу та CSS класу
 function getKpStatus(kpValue) {
     if (kpValue >= 9) {
-        return { text: "Екстремально сильна буря", class: "status-storm" }; // G5
+        return { text: "Екстремально сильна буря", class: "status-storm" };
     } else if (kpValue >= 8) {
-        return { text: "Дуже сильна буря", class: "status-storm" }; // G4
+        return { text: "Дуже сильна буря", class: "status-storm" };
     } else if (kpValue >= 7) {
-        return { text: "Сильна буря", class: "status-storm" }; // G3
+        return { text: "Сильна буря", class: "status-storm" };
     } else if (kpValue >= 6) {
-        return { text: "Помірна буря", class: "status-storm" }; // G2
+        return { text: "Помірна буря", class: "status-storm" };
     } else if (kpValue >= 5) {
-        return { text: "Слабка буря", class: "status-minor-storm" }; // G1
+        return { text: "Слабка буря", class: "status-minor-storm" };
     } else if (kpValue >= 4) {
         return { text: "Незначні збурення", class: "status-minor-storm" };
     } else {
@@ -60,8 +60,8 @@ function correctWeekdayNominative(weekdayName) {
 
 // Відображення сторінки прогнозу магнітних бур
 function showKpForecast(data) {
-    const tableBody = document.querySelector('.page-forecast');
-    tableBody.innerHTML = '';
+    const scheduleBody = document.querySelector('.page-forecast');
+    scheduleBody.innerHTML = '';
 
     const headers = data[0];
     const records = data.slice(1);
@@ -91,37 +91,40 @@ function showKpForecast(data) {
     for (const dayKey in groupedData) {
         if (groupedData.hasOwnProperty(dayKey)) {
             const dailyRecords = groupedData[dayKey];
+            console.log(dailyRecords);
+            
             const firstRecordDate = new Date(dayKey + 'T00:00:00Z'); // Створюємо дату для заголовка групи
+            const firstRecordDay =  new Date(dayKey + 'T00:00:00Z');
 
             // Опції форматування для заголовка групи (день тижня, число, місяць)
-            const groupHeaderOptions = {
-                weekday: 'long',
+            const groupHeaderDateOptions = {
                 day: 'numeric',
                 month: 'long',
                 timeZone: 'UTC'
             };
-            let formattedGroupHeader = firstRecordDate.toLocaleDateString('uk-UA', groupHeaderOptions);
 
-            // Розбиваємо рядок, щоб виділити день тижня, число та місяць
-            const parts = formattedGroupHeader.split(', ');
-                if (parts.length > 0) {
-                    const weekdayPart = parts[0];
-                    const correctedWeekday = correctWeekdayNominative(weekdayPart);
-                    formattedGroupHeader = correctedWeekday + ', ' + parts.slice(1).join(', ');
-                }
+            const groupHeaderDayOptions = {
+                weekday: 'long',
+                timeZone: 'UTC'
+            };
 
+            const formattedGroupHeaderDate = firstRecordDate.toLocaleDateString('uk-UA', groupHeaderDateOptions);
+            const formattedGroupHeaderDay = firstRecordDate.toLocaleDateString('uk-UA', groupHeaderDayOptions);
+ 
             // Створюємо рядок для заголовка групи
             const groupHeaderRow = document.createElement('div');
-            const groupHeaderCell = document.createElement('span');
-            groupHeaderCell.textContent = formattedGroupHeader.toUpperCase(); // Відображаємо заголовки великими літерами
-            groupHeaderRow.appendChild(groupHeaderCell);
-            tableBody.appendChild(groupHeaderRow);
+            const groupHeaderDay = document.createElement('span');
+            groupHeaderDay.textContent = formattedGroupHeaderDay.toLowerCase(); // Відображаємо заголовки малими літерами
+            groupHeaderRow.appendChild(groupHeaderDay);
+            const groupHeaderDate = document.createElement('span');
+            groupHeaderDate.textContent = formattedGroupHeaderDate.toLowerCase(); // Відображаємо заголовки малими літерами
+            groupHeaderRow.appendChild(groupHeaderDate);
+            scheduleBody.appendChild(groupHeaderRow);
 
             // Додаємо рядки з даними для цього дня
             dailyRecords.forEach(rowData => {
                 const kpValue = parseFloat(rowData.kp);
                 const statusInfo = getKpStatus(kpValue);
-                const noaaScale = rowData.noaa_scale || "Немає";
 
                 const tr = document.createElement('div');
 
@@ -134,7 +137,7 @@ function showKpForecast(data) {
                     timeZone: 'UTC'
                 };
                 const formattedTime = recordDateUtc.toLocaleTimeString('uk-UA', timeOptions);
-
+                
                 // Час
                 const tdTime = document.createElement('span');
                 tdTime.textContent = formattedTime;
@@ -155,13 +158,7 @@ function showKpForecast(data) {
                 tdStatus.className = statusInfo.class;
                 tr.appendChild(tdStatus);
 
-                // Рівень бурі NOAA
-                const tdNoaaScale = document.createElement('span');
-                tdNoaaScale.textContent = noaaScale;
-                tr.appendChild(tdNoaaScale);
-
-
-                tableBody.appendChild(tr);
+                scheduleBody.appendChild(tr);
             });
         }
     }
