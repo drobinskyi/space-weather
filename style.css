@@ -85,20 +85,6 @@ main {
   width: 120px;
 }
 
-/* Meteoagent */
-.page-meteoagent {
-  width: 100%;
-  height: 100%;
-  display: none;
-}
-
-.meteoagent-widget {
-  width: 100%;
-  height: 600px;
-  border-radius: 10px;
-  border: none;
-}
-
 /* Сторінка прогнозу магнітних бур */
 .page-forecast {
   width: 100%;

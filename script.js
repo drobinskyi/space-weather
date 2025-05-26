@@ -142,7 +142,11 @@ function showKpForecast(data) {
 
                 // Kp-індекс
                 const tdKp = document.createElement('span');
-                tdKp.textContent = kpValue.toFixed(2);
+                if (Number.isInteger(kpValue)) {
+                    tdKp.textContent = kpValue.toString(); // Якщо ціле, виводимо без коми
+                } else {
+                    tdKp.textContent = kpValue.toFixed(2); // Інакше - форматуємо до 2 знаків після коми
+                }
                 tr.appendChild(tdKp);
 
                 // Статус
