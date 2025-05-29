@@ -91,7 +91,6 @@ main {
   height: auto;
   display: flex;
   flex-direction: column;
-  gap: 4px;
 }
 
 .block-header {
@@ -113,12 +112,50 @@ main {
 }
 
 .block-date {
-  color: #bcbcbc;
+  color: #4b4b4b;
   font-size: 12px;
   font-weight: 300;
 }
 
-.block-day-info {
+.block-hour-info {
   width: 100%;
   height: auto;
+  padding: 4px 0 2px 20px;
+  display: flex;
+}
+
+.estimated {
+  background: linear-gradient(to right, #dcdcdc, #efeded);
+  width: 100%;
+  height: auto;
+}
+
+/* Стилі для першого .estimated */
+.first-estimated-style {
+  border-radius: 8px 8px 0 0;
+  scroll-margin-top: 140px;
+}
+
+/* Стилі для останнього .estimated */
+.last-estimated-style {
+  border-radius: 0 0 8px 8px;
+}
+
+.block-time {
+  width: 80px;
+  color: #4b4b4b;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.block-kp {
+  width: 60px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.block-status {
+  width: calc(100% - 120px);
+  background-color: blueviolet;
 }

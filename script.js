@@ -83,7 +83,6 @@ function showKpForecast(data) {
     for (const dayKey in groupedData) {
         if (groupedData.hasOwnProperty(dayKey)) {
             const dailyRecords = groupedData[dayKey];
-            console.log(dailyRecords);
             
             const firstRecordDate = new Date(dayKey + 'T00:00:00Z'); // Створюємо дату для заголовка групи
 
@@ -120,9 +119,16 @@ function showKpForecast(data) {
             dailyRecords.forEach(rowData => {
                 const kpValue = parseFloat(rowData.kp);
                 const statusInfo = getKpStatus(kpValue);
+ 
+                const hourInfo = document.createElement('div');
+                hourInfo.classList.add('block-hour-info');
 
-                const tr = document.createElement('div');
-                tr.classList.add('block-day-info');
+                // Перевіряємо поточні спостереження
+                const observedInfo = rowData.observed;
+
+                if (observedInfo === 'estimated') {
+                    hourInfo.classList.add('estimated');
+                }
 
                 // Форматуємо лише час для кожного запису
                 const recordDateUtc = new Date(rowData.time_tag.replace(' ', 'T') + 'Z');
@@ -135,29 +141,66 @@ function showKpForecast(data) {
                 const formattedTime = recordDateUtc.toLocaleTimeString('uk-UA', timeOptions);
                 
                 // Час
-                const tdTime = document.createElement('span');
-                tdTime.textContent = formattedTime;
-                tr.appendChild(tdTime);
+                const infoTime = document.createElement('div');
+                infoTime.classList.add('block-time');
+                infoTime.textContent = formattedTime;
+                hourInfo.appendChild(infoTime);
 
                 // Kp-індекс
-                const tdKp = document.createElement('span');
+                const infoKp = document.createElement('div');
+                infoKp.classList.add('block-kp');
                 if (Number.isInteger(kpValue)) {
-                    tdKp.textContent = kpValue.toString(); // Якщо ціле, виводимо без коми
+                    infoKp.textContent = kpValue.toString(); // Якщо ціле, виводимо без коми
                 } else {
-                    tdKp.textContent = kpValue.toFixed(2); // Інакше - форматуємо до 2 знаків після коми
+                    infoKp.textContent = kpValue.toFixed(2); // Інакше - форматуємо до 2 знаків після коми
                 }
-                tr.appendChild(tdKp);
+
+                if (kpValue >= 7) {
+                    infoKp.setAttribute("style", "color: #8e0000")
+                } else if (kpValue >= 5) {
+                    infoKp.setAttribute("style", "color: #cc0000")
+                } else if (kpValue >= 4) {
+                    infoKp.setAttribute("style", "color: #cf8232")
+                } else {
+                    infoKp.setAttribute("style", "color: #84b070")
+                }
+            
+                hourInfo.appendChild(infoKp);
 
                 // Статус
-                const tdStatus = document.createElement('span');
-                tdStatus.textContent = statusInfo.text;
-                tdStatus.className = statusInfo.class;
-                tr.appendChild(tdStatus);
+                const infoStatus = document.createElement('div');
+                infoStatus.classList.add('block-status');
+                infoStatus.textContent = statusInfo.text;
+                infoStatus.className = statusInfo.class;
+                hourInfo.appendChild(infoStatus);
 
-                scheduleBody.appendChild(tr);
+                scheduleBody.appendChild(hourInfo);
+                // groupHeaderBlock.appendChild(hourInfo);
             });
         }
     }
+
+    // Стилізуємо перший і останній виділені елементи
+    const estimatedBlocks = document.querySelectorAll('.estimated');
+    console.log(estimatedBlocks.length);
+        
+    if (estimatedBlocks.length > 0) {
+        // Додаємо клас до першого елемента
+        estimatedBlocks[0].classList.add('first-estimated-style');
+    
+        // Додаємо клас до останнього елемента
+        if (estimatedBlocks.length > 1) {
+            estimatedBlocks[estimatedBlocks.length - 1].classList.add('last-estimated-style');
+        }
+    }
+
+    const targetElement = document.querySelector('.estimated'); // Знаходить ПЕРШИЙ елемент з класом .estimated
+
+    if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
 };
 
 loadData(dataNOAA);
+
