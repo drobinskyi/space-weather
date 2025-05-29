@@ -89,4 +89,36 @@ main {
 .page-forecast {
   width: 100%;
   height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.block-header {
+  width: 100%;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #bcbcbc;
+}
+
+.block-header:first-child {
+  padding-top: 0;
+}
+
+.block-day {
+  color: #4b4b4b;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.block-date {
+  color: #a9a9a9;
+  font-size: 12px;
+  font-weight: 300;
+}
+
+.block-day-info {
+  width: 100%;
+  height: auto;
 }

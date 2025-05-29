@@ -44,19 +44,11 @@ function getKpStatus(kpValue) {
     }
 };
 
-// Виправлення відмінка дня тижня
-function correctWeekdayNominative(weekdayName) {
-    switch (weekdayName.toLowerCase()) {
-        case 'понеділок': return 'Понеділок';
-        case 'вівторок': return 'Вівторок';
-        case 'середу': return 'Середа';
-        case 'четвер': return 'Четвер';
-        case 'пʼятницю': return 'П’ятниця';
-        case 'суботу': return 'Субота';
-        case 'неділю': return 'Неділя';
-        default: return weekdayName; // Повертаємо як є, якщо не знайдено
-    }
-}
+// Написання днів тижня з великої літери
+function capitalizeFirstLetter(string) {
+    if (!string) return ''; // Обробка порожнього рядка
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  }
 
 // Відображення сторінки прогнозу магнітних бур
 function showKpForecast(data) {
@@ -94,7 +86,6 @@ function showKpForecast(data) {
             console.log(dailyRecords);
             
             const firstRecordDate = new Date(dayKey + 'T00:00:00Z'); // Створюємо дату для заголовка групи
-            const firstRecordDay =  new Date(dayKey + 'T00:00:00Z');
 
             // Опції форматування для заголовка групи (день тижня, число, місяць)
             const groupHeaderDateOptions = {
@@ -110,16 +101,20 @@ function showKpForecast(data) {
 
             const formattedGroupHeaderDate = firstRecordDate.toLocaleDateString('uk-UA', groupHeaderDateOptions);
             const formattedGroupHeaderDay = firstRecordDate.toLocaleDateString('uk-UA', groupHeaderDayOptions);
+            const capitalizedDay = capitalizeFirstLetter(formattedGroupHeaderDay);
  
             // Створюємо рядок для заголовка групи
-            const groupHeaderRow = document.createElement('div');
-            const groupHeaderDay = document.createElement('span');
-            groupHeaderDay.textContent = formattedGroupHeaderDay.toLowerCase(); // Відображаємо заголовки малими літерами
-            groupHeaderRow.appendChild(groupHeaderDay);
-            const groupHeaderDate = document.createElement('span');
-            groupHeaderDate.textContent = formattedGroupHeaderDate.toLowerCase(); // Відображаємо заголовки малими літерами
-            groupHeaderRow.appendChild(groupHeaderDate);
-            scheduleBody.appendChild(groupHeaderRow);
+            const groupHeaderBlock = document.createElement('div');
+            groupHeaderBlock.classList.add('block-header');
+            const groupHeaderDay = document.createElement('h2');
+            groupHeaderDay.classList.add('block-day');
+            groupHeaderDay.textContent = capitalizedDay;
+            groupHeaderBlock.appendChild(groupHeaderDay);
+            const groupHeaderDate = document.createElement('h3');
+            groupHeaderDate.classList.add('block-date');
+            groupHeaderDate.textContent = formattedGroupHeaderDate;
+            groupHeaderBlock.appendChild(groupHeaderDate);
+            scheduleBody.appendChild(groupHeaderBlock);
 
             // Додаємо рядки з даними для цього дня
             dailyRecords.forEach(rowData => {
@@ -127,6 +122,7 @@ function showKpForecast(data) {
                 const statusInfo = getKpStatus(kpValue);
 
                 const tr = document.createElement('div');
+                tr.classList.add('block-day-info');
 
                 // Форматуємо лише час для кожного запису
                 const recordDateUtc = new Date(rowData.time_tag.replace(' ', 'T') + 'Z');
