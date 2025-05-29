@@ -209,6 +209,8 @@ function showKpForecast(data) {
         if (estimatedBlocks.length > 1) {
             estimatedBlocks[estimatedBlocks.length - 1].classList.add('last-estimated-style');
         }
+    } if (estimatedBlocks.length === 1) {
+        estimatedBlocks[0].classList.add('single-estimated-style');
     }
 
     // Прокручування до поточного часу

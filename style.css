@@ -139,6 +139,11 @@ main {
   border-radius: 0 0 8px 8px;
 }
 
+/* Стилі для єдиного .estimated */
+.single-estimated-style {
+  border-radius: 8px;
+}
+
 .block-time {
   width: 80px;
   color: #4b4b4b;
