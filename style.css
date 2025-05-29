@@ -11,7 +11,7 @@ body {
 
 /* Шапка сайту */
 .header {
-  height: 120px;
+  height: 115px;
   width: 100%;
   padding: 20px;
   position: sticky;
@@ -54,7 +54,7 @@ main {
 /* Вікно помилки */
 .page-404 {
   width: 100%;
-  height: calc(100dvh - 160px);
+  height: calc(100dvh - 155px);
   display: none;
   justify-content: space-between;
 }
@@ -113,7 +113,7 @@ main {
 }
 
 .block-date {
-  color: #a9a9a9;
+  color: #bcbcbc;
   font-size: 12px;
   font-weight: 300;
 }
