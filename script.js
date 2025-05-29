@@ -25,22 +25,22 @@ function errorMessage() {
     pageError.setAttribute("style", "display: flex");
 }
 
-// Функція для отримання текстового статусу та CSS класу
+// Функція для отримання текстового статусу
 function getKpStatus(kpValue) {
     if (kpValue >= 9) {
-        return { text: "Екстремально сильна буря", class: "status-storm" };
+        return { text: "Екстремально сильна буря" };
     } else if (kpValue >= 8) {
-        return { text: "Дуже сильна буря", class: "status-storm" };
+        return { text: "Дуже сильна буря" };
     } else if (kpValue >= 7) {
-        return { text: "Сильна буря", class: "status-storm" };
+        return { text: "Сильна буря" };
     } else if (kpValue >= 6) {
-        return { text: "Помірна буря", class: "status-storm" };
+        return { text: "Помірна буря" };
     } else if (kpValue >= 5) {
-        return { text: "Слабка буря", class: "status-minor-storm" };
+        return { text: "Слабка буря" };
     } else if (kpValue >= 4) {
-        return { text: "Незначні збурення", class: "status-minor-storm" };
+        return { text: "Незначні збурення" };
     } else {
-        return { text: "Спокійно", class: "status-calm" };
+        return { text: "Спокійно" };
     }
 };
 
@@ -154,25 +154,43 @@ function showKpForecast(data) {
                 } else {
                     infoKp.textContent = kpValue.toFixed(2); // Інакше - форматуємо до 2 знаків після коми
                 }
-
-                if (kpValue >= 7) {
-                    infoKp.setAttribute("style", "color: #8e0000")
-                } else if (kpValue >= 5) {
-                    infoKp.setAttribute("style", "color: #cc0000")
-                } else if (kpValue >= 4) {
-                    infoKp.setAttribute("style", "color: #cf8232")
-                } else {
-                    infoKp.setAttribute("style", "color: #84b070")
-                }
             
                 hourInfo.appendChild(infoKp);
 
                 // Статус
                 const infoStatus = document.createElement('div');
                 infoStatus.classList.add('block-status');
-                infoStatus.textContent = statusInfo.text;
-                infoStatus.className = statusInfo.class;
+                    // Додаємо текст до статусу
+                const infoStatusText = document.createElement('p');
+                infoStatusText.classList.add('block-status-text');
+                infoStatusText.textContent = statusInfo.text;
+                infoStatus.appendChild(infoStatusText);
+                    // Додаємо лінію до статусу
+                const infoStatusLine = document.createElement('div');
+                infoStatusLine.classList.add('block-status-line');
+                infoStatus.appendChild(infoStatusLine);
+
                 hourInfo.appendChild(infoStatus);
+
+                // Задаємо кольори індексу і лінії
+                if (kpValue >= 7) {
+                    infoKp.setAttribute("style", "color: #8e0000");
+                    infoStatusLine.setAttribute("style", "background-color: #8e0000");
+                } else if (kpValue >= 5) {
+                    infoKp.setAttribute("style", "color: #cc0000");
+                    infoStatusLine.setAttribute("style", "background-color: #cc0000")
+                } else if (kpValue >= 4) {
+                    infoKp.setAttribute("style", "color: #cf8232");
+                    infoStatusLine.setAttribute("style", "background-color: #cf8232");
+                } else {
+                    infoKp.setAttribute("style", "color: #84b070");
+                    infoStatusLine.setAttribute("style", "background-color: #84b070");
+                }
+
+                // Розраховуємо довжину лінії
+                const statusLineLength = kpValue * 100 / 9;
+                const statusLineLengthRound = Math.round(statusLineLength);
+                infoStatusLine.style.width = statusLineLengthRound + '%';
 
                 scheduleBody.appendChild(hourInfo);
                 // groupHeaderBlock.appendChild(hourInfo);
@@ -182,7 +200,6 @@ function showKpForecast(data) {
 
     // Стилізуємо перший і останній виділені елементи
     const estimatedBlocks = document.querySelectorAll('.estimated');
-    console.log(estimatedBlocks.length);
         
     if (estimatedBlocks.length > 0) {
         // Додаємо клас до першого елемента
@@ -194,6 +211,7 @@ function showKpForecast(data) {
         }
     }
 
+    // Прокручування до поточного часу
     const targetElement = document.querySelector('.estimated'); // Знаходить ПЕРШИЙ елемент з класом .estimated
 
     if (targetElement) {
