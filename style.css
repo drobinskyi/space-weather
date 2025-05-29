@@ -125,9 +125,7 @@ main {
 }
 
 .estimated {
-  background: linear-gradient(to right, #dcdcdc, #efeded);
-  width: 100%;
-  height: auto;
+  background: linear-gradient(to right, #c6c6c6, #efeded);
 }
 
 /* Стилі для першого .estimated */
