@@ -131,7 +131,7 @@ main {
 /* Стилі для першого .estimated */
 .first-estimated-style {
   border-radius: 8px 8px 0 0;
-  scroll-margin-top: 140px;
+  scroll-margin-top: 144px;
 }
 
 /* Стилі для останнього .estimated */
@@ -142,6 +142,11 @@ main {
 /* Стилі для єдиного .estimated */
 .single-estimated-style {
   border-radius: 8px;
+}
+
+/* Стилі для останнього .observed */
+.last-observed-style {
+  scroll-margin-top: 200px;
 }
 
 .block-time {

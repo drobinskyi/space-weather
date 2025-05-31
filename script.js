@@ -128,6 +128,8 @@ function showKpForecast(data) {
 
                 if (observedInfo === 'estimated') {
                     hourInfo.classList.add('estimated');
+                } else if (observedInfo === 'observed') {
+                    hourInfo.classList.add('observed');
                 }
 
                 // Форматуємо лише час для кожного запису
@@ -214,10 +216,16 @@ function showKpForecast(data) {
     }
 
     // Прокручування до поточного часу
-    const targetElement = document.querySelector('.estimated'); // Знаходить ПЕРШИЙ елемент з класом .estimated
+    const targetElement = document.querySelector('.estimated'); // Знаходимо ПЕРШИЙ елемент з класом .estimated
 
+    const pastElements = document.querySelectorAll('.observed'); // Всі елементи з класом .observed
+    const pastElement = pastElements[pastElements.length - 1];
+    pastElement.classList.add('last-observed-style');
+    
     if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (!targetElement) {
+        pastElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     
 };
