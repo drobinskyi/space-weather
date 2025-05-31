@@ -220,11 +220,14 @@ function showKpForecast(data) {
 
     const futureElements = document.querySelectorAll('.predicted'); // Всі елементи з класом .predicted
     const futureElement = futureElements[0];
-    futureElement.classList.add('first-predicted-style');
+
+    if (estimatedBlocks.length === 0) {
+        futureElement.classList.add('first-predicted-style'); // Стилізуємо перший елемент з класом .predicted
+    }
     
     if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else if (!targetElement) {
+    } else {
         futureElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     
