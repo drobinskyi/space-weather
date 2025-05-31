@@ -128,8 +128,8 @@ function showKpForecast(data) {
 
                 if (observedInfo === 'estimated') {
                     hourInfo.classList.add('estimated');
-                } else if (observedInfo === 'observed') {
-                    hourInfo.classList.add('observed');
+                } else if (observedInfo === 'predicted') {
+                    hourInfo.classList.add('predicted');
                 }
 
                 // Форматуємо лише час для кожного запису
@@ -218,14 +218,14 @@ function showKpForecast(data) {
     // Прокручування до поточного часу
     const targetElement = document.querySelector('.estimated'); // Знаходимо ПЕРШИЙ елемент з класом .estimated
 
-    const pastElements = document.querySelectorAll('.observed'); // Всі елементи з класом .observed
-    const pastElement = pastElements[pastElements.length - 1];
-    pastElement.classList.add('last-observed-style');
+    const futureElements = document.querySelectorAll('.predicted'); // Всі елементи з класом .predicted
+    const futureElement = futureElements[0];
+    futureElement.classList.add('first-predicted-style');
     
     if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else if (!targetElement) {
-        pastElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        futureElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     
 };
