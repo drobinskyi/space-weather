@@ -57,6 +57,7 @@ body {
   position: absolute;
   top: calc(115px - 30px);
   right: 16px;
+  transform: rotate(0);
   animation-name: sun-animation;
   animation-timing-function: ease-in-out;
   animation-direction: normal;
@@ -68,11 +69,13 @@ body {
     height: 10px;
     top: calc(115px - 50px);
     right: -30px;
+    transform: rotate(-90deg);
   }
   100% {
     height: 60px;
     top: calc(115px - 30px);
     right: 16px;
+    transform: rotate(0);
   }
 }
 
