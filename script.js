@@ -55,22 +55,19 @@ function showKpForecast(data) {
     const scheduleBody = document.querySelector('.page-forecast');
     scheduleBody.innerHTML = '';
 
-    const headers = data[0];
-    const records = data.slice(1);
+    const records = data; 
 
     // Об'єкт для групування даних по днях
     const groupedData = {};
 
-    records.forEach(row => {
-        const rowData = {};
-        headers.forEach((header, index) => {
-            rowData[header] = row[index];
-        });
-
+    records.forEach(rowData => {
+        
         const rawDateString = rowData.time_tag;
+        
+        // Створюємо дату. NOAA формат "YYYY-MM-DD HH:MM:SS" коректно підхоплюється так:
         const dateUtc = new Date(rawDateString.replace(' ', 'T') + 'Z');
 
-        // Отримуємо "ключ" дня (наприклад, "2025-05-19") для групування
+        // Отримуємо "ключ" дня (наприклад, "2026-04-04")
         const dayKey = dateUtc.toISOString().split('T')[0];
 
         if (!groupedData[dayKey]) {
@@ -83,63 +80,50 @@ function showKpForecast(data) {
     for (const dayKey in groupedData) {
         if (groupedData.hasOwnProperty(dayKey)) {
             const dailyRecords = groupedData[dayKey];
-            
-            const firstRecordDate = new Date(dayKey + 'T00:00:00Z'); // Створюємо дату для заголовка групи
+            const firstRecordDate = new Date(dayKey + 'T00:00:00Z');
 
-            // Опції форматування для заголовка групи (день тижня, число, місяць)
-            const groupHeaderDateOptions = {
-                day: 'numeric',
-                month: 'long',
-                timeZone: 'UTC'
-            };
-
-            const groupHeaderDayOptions = {
-                weekday: 'long',
-                timeZone: 'UTC'
-            };
+            // Форматування заголовків
+            const groupHeaderDateOptions = { day: 'numeric', month: 'long', timeZone: 'UTC' };
+            const groupHeaderDayOptions = { weekday: 'long', timeZone: 'UTC' };
 
             const formattedGroupHeaderDate = firstRecordDate.toLocaleDateString('uk-UA', groupHeaderDateOptions);
             const formattedGroupHeaderDay = firstRecordDate.toLocaleDateString('uk-UA', groupHeaderDayOptions);
             const capitalizedDay = capitalizeFirstLetter(formattedGroupHeaderDay);
- 
-            // Створюємо рядок для заголовка групи
+
+            // Створення DOM для заголовка
             const groupHeaderBlock = document.createElement('div');
             groupHeaderBlock.classList.add('block-header');
+            
             const groupHeaderDay = document.createElement('h2');
             groupHeaderDay.classList.add('block-day');
             groupHeaderDay.textContent = capitalizedDay;
             groupHeaderBlock.appendChild(groupHeaderDay);
+            
             const groupHeaderDate = document.createElement('h3');
             groupHeaderDate.classList.add('block-date');
             groupHeaderDate.textContent = formattedGroupHeaderDate;
             groupHeaderBlock.appendChild(groupHeaderDate);
+            
             scheduleBody.appendChild(groupHeaderBlock);
 
             // Додаємо рядки з даними для цього дня
             dailyRecords.forEach(rowData => {
-                const kpValue = parseFloat(rowData.kp);
+                const kpValue = parseFloat(rowData.kp || rowData.kp_index || 0); // На випадок зміни kp на kp_index
                 const statusInfo = getKpStatus(kpValue);
- 
+
                 const hourInfo = document.createElement('div');
                 hourInfo.classList.add('block-hour-info');
 
-                // Перевіряємо поточні спостереження
-                const observedInfo = rowData.observed;
-
-                if (observedInfo === 'estimated') {
+                // Поле "noaa_scale" тепер містить статус (predicted/estimated) або використовуємо логіку за часом
+                // NOAA у новому форматі зазвичай пише статус у полі noaa_scale
+                if (rowData.observed === 'estimated') {
                     hourInfo.classList.add('estimated');
-                } else if (observedInfo === 'predicted') {
+                } else if (rowData.observed === 'predicted') {
                     hourInfo.classList.add('predicted');
                 }
 
-                // Форматуємо лише час для кожного запису
                 const recordDateUtc = new Date(rowData.time_tag.replace(' ', 'T') + 'Z');
-                const timeOptions = {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hourCycle: 'h23',
-                    timeZone: 'UTC'
-                };
+                const timeOptions = { hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'UTC' };
                 const formattedTime = recordDateUtc.toLocaleTimeString('uk-UA', timeOptions);
                 
                 // Час
@@ -151,51 +135,42 @@ function showKpForecast(data) {
                 // Kp-індекс
                 const infoKp = document.createElement('div');
                 infoKp.classList.add('block-kp');
-                if (Number.isInteger(kpValue)) {
-                    infoKp.textContent = kpValue.toString(); // Якщо ціле, виводимо без коми
-                } else {
-                    infoKp.textContent = kpValue.toFixed(2); // Інакше - форматуємо до 2 знаків після коми
-                }
-            
+                infoKp.textContent = Number.isInteger(kpValue) ? kpValue.toString() : kpValue.toFixed(2);
                 hourInfo.appendChild(infoKp);
 
-                // Статус
+                // Статус та лінія
                 const infoStatus = document.createElement('div');
                 infoStatus.classList.add('block-status');
-                    // Додаємо текст до статусу
+                
                 const infoStatusText = document.createElement('p');
                 infoStatusText.classList.add('block-status-text');
                 infoStatusText.textContent = statusInfo.text;
                 infoStatus.appendChild(infoStatusText);
-                    // Додаємо лінію до статусу
+
                 const infoStatusLine = document.createElement('div');
                 infoStatusLine.classList.add('block-status-line');
                 infoStatus.appendChild(infoStatusLine);
-
                 hourInfo.appendChild(infoStatus);
 
-                // Задаємо кольори індексу і лінії
+                // Колірна логіка
                 if (kpValue >= 7) {
-                    infoKp.setAttribute("style", "color: #8e0000");
-                    infoStatusLine.setAttribute("style", "background-color: #8e0000");
+                    infoKp.style.color = "#8e0000";
+                    infoStatusLine.style.backgroundColor = "#8e0000";
                 } else if (kpValue >= 5) {
-                    infoKp.setAttribute("style", "color: #cc0000");
-                    infoStatusLine.setAttribute("style", "background-color: #cc0000")
+                    infoKp.style.color = "#cc0000";
+                    infoStatusLine.style.backgroundColor = "#cc0000";
                 } else if (kpValue >= 4) {
-                    infoKp.setAttribute("style", "color: #cf8232");
-                    infoStatusLine.setAttribute("style", "background-color: #cf8232");
+                    infoKp.style.color = "#cf8232";
+                    infoStatusLine.style.backgroundColor = "#cf8232";
                 } else {
-                    infoKp.setAttribute("style", "color: #84b070");
-                    infoStatusLine.setAttribute("style", "background-color: #84b070");
+                    infoKp.style.color = "#84b070";
+                    infoStatusLine.style.backgroundColor = "#84b070";
                 }
 
-                // Розраховуємо довжину лінії
-                const statusLineLength = kpValue * 100 / 9;
-                const statusLineLengthRound = Math.round(statusLineLength);
-                infoStatusLine.style.width = statusLineLengthRound + '%';
+                const statusLineLength = (kpValue * 100) / 9;
+                infoStatusLine.style.width = Math.round(statusLineLength) + '%';
 
                 scheduleBody.appendChild(hourInfo);
-                // groupHeaderBlock.appendChild(hourInfo);
             });
         }
     }
