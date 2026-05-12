@@ -11,9 +11,9 @@ body {
 
 /* Шапка сайту */
 .header {
-  height: 115px;
+  height: 85px;
   width: 100%;
-  padding: 20px;
+  padding: 10px 20px;
   position: sticky;
   top: 0;
   display: flex;
@@ -166,7 +166,7 @@ main {
 /* Стилі для першого .estimated */
 .first-estimated-style {
   border-radius: 8px 8px 0 0;
-  scroll-margin-top: 144px;
+  scroll-margin-top: 114px;
 }
 
 /* Стилі для останнього .estimated */
