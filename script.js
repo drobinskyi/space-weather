@@ -153,7 +153,10 @@ function showKpForecast(data) {
                 hourInfo.appendChild(infoStatus);
 
                 // Колірна логіка
-                if (kpValue >= 7) {
+                if (kpValue >= 8) {
+                    infoKp.style.color = "#632280";
+                    infoStatusLine.style.backgroundColor = "#632280";
+                } else if (kpValue >= 7) {
                     infoKp.style.color = "#8e0000";
                     infoStatusLine.style.backgroundColor = "#8e0000";
                 } else if (kpValue >= 5) {
